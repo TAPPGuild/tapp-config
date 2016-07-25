@@ -47,6 +47,11 @@ class TestSetupLogger(unittest.TestCase):
             pass
 
     def tearDown(self):
+        logger = setup_logging()
+        for handler in logger.handlers:
+            logger.removeHandler(handler)
+        for handler in logger.parent.handlers:
+            logger.parent.removeHandler(handler)
         self.setUp()
 
     def test_setup_default_logger(self):
