@@ -3,6 +3,7 @@ from setuptools import setup
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 3",
     "Topic :: Software Development :: Libraries",
 ]
 
@@ -17,7 +18,7 @@ readme = readme[:top] + more.format(url) + readme[bottom:]
 
 setup(
     name='tapp-config',
-    version='0.0.1',
+    version='0.0.2',
     py_modules=['tapp_config'],
     url=url,
     long_description=readme,

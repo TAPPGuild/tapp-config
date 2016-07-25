@@ -38,7 +38,7 @@ Contents
     LOGFILE: /tmp/test.log
     LOGLEVEL: DEBUG
 
-.. |Build Status| image:: https://travis-ci.org/gitguild/tapp-config.svg?branch=master
-   :target: https://travis-ci.org/gitguild/tapp-config
-.. |Coverage Status| image:: https://coveralls.io/repos/gitguild/tapp-config/badge.svg?branch=master&service=github
-   :target: https://coveralls.io/github/gitguild/tapp-config?branch=master
+.. |Build Status| image:: https://travis-ci.org/GitGuild/tapp-config.svg?branch=master
+   :target: https://travis-ci.org/GitGuild/tapp-config
+.. |Coverage Status| image:: https://coveralls.io/repos/GitGuild/tapp-config/badge.svg?branch=master&service=github
+   :target: https://coveralls.io/github/GitGuild/tapp-config?branch=master

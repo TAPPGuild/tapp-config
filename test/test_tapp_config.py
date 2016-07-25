@@ -10,7 +10,7 @@ class TestRedis(unittest.TestCase):
         red = setup_redis()
         assert isinstance(red, StrictRedis)
         red.set("testing", "1.2.3")
-        test = red.get("testing")
+        test = red.get("testing").decode("utf-8")
         assert test == "1.2.3"
 
 
