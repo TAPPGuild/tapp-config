@@ -25,7 +25,7 @@ setup(
     classifiers=classifiers,
     author='Ira Miller',
     author_email='ira@gitguild.com',
-    description='Configuration for tapps (sqlalchemy, logger, etc.)',
+    description='Configuration for tapps (redis, logger, etc.)',
     setup_requires=['pytest-runner'],
     install_requires=[
         'redis'

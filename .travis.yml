@@ -5,6 +5,9 @@ python:
 
 sudo: false
 
+before_install:
+  - pip install -U coveralls
+
 install:
   - python setup.py -q install
 
