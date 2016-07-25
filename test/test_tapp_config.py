@@ -68,7 +68,7 @@ class TestSetupLogger(unittest.TestCase):
         assert isinstance(logger, logging.getLoggerClass())
         message = 'testing 1.2.3.'
         logger.exception(message)
-        assert os.path.isfile('/tmp/test.log')
+        assert logger.parent.handlers[0].baseFilename == '/tmp/test.log'
 
 
 
