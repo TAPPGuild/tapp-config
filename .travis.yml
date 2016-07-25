@@ -5,6 +5,9 @@ python:
 
 sudo: false
 
+services:
+  - redis-server
+
 before_install:
   - pip install -U coveralls
 
