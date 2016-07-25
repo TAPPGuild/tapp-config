@@ -1,4 +1,4 @@
-# tapp-config [![Build Status](https://travis-ci.org/gitguild/tapp-config.svg?branch=master)](https://travis-ci.org/gitguild/tapp-config) [![Coverage Status](https://coveralls.io/repos/gitguild/tapp-config/badge.svg?branch=master&service=github)](https://coveralls.io/github/gitguild/tapp-config?branch=master)
+# tapp-config [![Build Status](https://travis-ci.org/GitGuild/tapp-config.svg?branch=master)](https://travis-ci.org/GitGuild/tapp-config) [![Coverage Status](https://coveralls.io/repos/GitGuild/tapp-config/badge.svg?branch=master&service=github)](https://coveralls.io/github/GitGuild/tapp-config?branch=master)
 
 Configuration for tapps (redis, logger, etc.)
 
