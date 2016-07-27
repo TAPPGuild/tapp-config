@@ -8,7 +8,7 @@ from os.path import expanduser
 try:
     from ConfigParser import ConfigParser, NoOptionError
 except ImportError:
-    from configparser import ConfigParser
+    from configparser import ConfigParser, NoOptionError
 
 import logging
 import os
@@ -32,7 +32,7 @@ def get_config(name=__name__):
     path = os.environ.get('%s_CONFIG_FILE' % name.upper(), '%s/cfg.ini' % datadir)
     cfg.read(path)
     try:
-        if cfg.get('log', 'DATA_DIR', None) is None:
+        if cfg.get('log', 'DATA_DIR') is None:
             cfg.set('log', 'DATA_DIR', str(datadir))
     except NoOptionError:
         cfg.set('log', 'DATA_DIR', str(datadir))
