@@ -12,7 +12,7 @@ before_install:
   - pip install -U coveralls
 
 install:
-  - python setup.py -q install
+  - make install
 
 script:
   - python setup.py pytest --addopts --cov=tapp_config
