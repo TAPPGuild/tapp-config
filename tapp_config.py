@@ -3,8 +3,10 @@ Configuration helpers for TAPPs. Config file and record management are here,
 as well as logging and redis.
 Database configuration is done in sqlalchemy_models, since it has the content to test with.
 """
+from os.path import expanduser
+
 try:
-    from ConfigParser import ConfigParser
+    from ConfigParser import ConfigParser, NoOptionError
 except ImportError:
     from configparser import ConfigParser
 
@@ -25,8 +27,15 @@ def get_config(name=__name__):
     :return: A config parser matching the given name
     """
     cfg = ConfigParser()
-    path = os.environ.get('%s_CONFIG_FILE' % name.upper(), 'cfg.ini')
+    datadir = os.environ.get('%s_DATA_DIR' % name.upper(), os.path.join(expanduser("~"),
+                             '.tapp/%s' % name.lower().replace('-', "").replace('_', "")))
+    path = os.environ.get('%s_CONFIG_FILE' % name.upper(), '%s/cfg.ini' % datadir)
     cfg.read(path)
+    try:
+        if cfg.get('log', 'DATA_DIR', None) is None:
+            cfg.set('log', 'DATA_DIR', str(datadir))
+    except NoOptionError:
+        cfg.set('log', 'DATA_DIR', str(datadir))
     return cfg
 
 

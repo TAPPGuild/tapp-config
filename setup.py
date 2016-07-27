@@ -18,7 +18,7 @@ readme = readme[:top] + more.format(url) + readme[bottom:]
 
 setup(
     name='tapp-config',
-    version='0.0.2',
+    version='0.0.3',
     py_modules=['tapp_config'],
     url=url,
     long_description=readme,
