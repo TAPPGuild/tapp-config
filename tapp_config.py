@@ -39,20 +39,23 @@ def get_config(name=__name__):
     return cfg
 
 
-def setup_logging(cfg=None):
+def setup_logging(name, cfg=None):
     """
     Create a logger, based on the given configuration.
     Accepts LOGFILE and LOGLEVEL settings.
 
+    :param name: the name of the tapp to log
     :param cfg: The configuration object with logging info.
     :return: The session and the engine as a list (in that order)
     """
-    logfile = cfg.get('log', 'LOGFILE') if cfg is not None and \
-        cfg.get('log', 'LOGFILE') is not None else 'server.log'
+    logname = "%s_tapp.log" % name
+    logfile = os.path.join(cfg.get('log', 'DATA_DIR'), logname)
+    # logfile = cfg.get('log', 'LOGFILE') if cfg is not None and \
+    #     cfg.get('log', 'LOGFILE') is not None else 'server.log'
     loglevel = cfg.get('log', 'LOGLEVEL') if cfg is not None and \
         cfg.get('log', 'LOGLEVEL') is not None else logging.INFO
     logging.basicConfig(filename=logfile, level=loglevel)
-    return logging.getLogger(__name__)
+    return logging.getLogger(name)
 
 
 def setup_redis():
