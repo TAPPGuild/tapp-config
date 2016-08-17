@@ -47,7 +47,7 @@ class TestSetupLogger(unittest.TestCase):
             pass
 
     def tearDown(self):
-        logger = setup_logging()
+        logger = setup_logging('test')
         for handler in logger.handlers:
             logger.removeHandler(handler)
         for handler in logger.parent.handlers:
@@ -55,7 +55,7 @@ class TestSetupLogger(unittest.TestCase):
         self.setUp()
 
     def test_setup_default_logger(self):
-        logger = setup_logging()
+        logger = setup_logging('test')
         assert isinstance(logger, logging.getLoggerClass())
         message = 'testing 1.2.3.'
         logger.exception(message)
@@ -64,7 +64,7 @@ class TestSetupLogger(unittest.TestCase):
     def test_setup_logger(self):
         cfg = get_config("test")
         assert cfg.get('log', 'LOGFILE') == '/tmp/test.log'
-        logger = setup_logging(cfg)
+        logger = setup_logging('test', cfg=cfg)
         assert isinstance(logger, logging.getLoggerClass())
         message = 'testing 1.2.3.'
         logger.exception(message)

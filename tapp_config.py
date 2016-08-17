@@ -27,15 +27,8 @@ def get_config(name=__name__):
     :return: A config parser matching the given name
     """
     cfg = ConfigParser()
-    datadir = os.environ.get('%s_DATA_DIR' % name.upper(), os.path.join(expanduser("~"),
-                             '.tapp/%s' % name.lower().replace('-', "").replace('_', "")))
-    path = os.environ.get('%s_CONFIG_FILE' % name.upper(), '%s/cfg.ini' % datadir)
+    path = os.environ.get('%s_CONFIG_FILE' % name.upper(), '/etc/tapp/%s_cfg.ini' % name)
     cfg.read(path)
-    try:
-        if cfg.get('log', 'DATA_DIR') is None:
-            cfg.set('log', 'DATA_DIR', str(datadir))
-    except NoOptionError:
-        cfg.set('log', 'DATA_DIR', str(datadir))
     return cfg
 
 
@@ -49,9 +42,8 @@ def setup_logging(name, cfg=None):
     :return: The session and the engine as a list (in that order)
     """
     logname = "%s_tapp.log" % name
-    logfile = os.path.join(cfg.get('log', 'DATA_DIR'), logname)
-    # logfile = cfg.get('log', 'LOGFILE') if cfg is not None and \
-    #     cfg.get('log', 'LOGFILE') is not None else 'server.log'
+    logfile = cfg.get('log', 'LOGFILE') if cfg is not None and \
+        cfg.get('log', 'LOGFILE') is not None else 'server.log'
     loglevel = cfg.get('log', 'LOGLEVEL') if cfg is not None and \
         cfg.get('log', 'LOGLEVEL') is not None else logging.INFO
     logging.basicConfig(filename=logfile, level=loglevel)
