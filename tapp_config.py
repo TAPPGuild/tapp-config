@@ -3,12 +3,12 @@ Configuration helpers for TAPPs. Config file and record management are here,
 as well as logging and redis.
 Database configuration is done in sqlalchemy_models, since it has the content to test with.
 """
-from os.path import expanduser
+from os.path import isfile
 
 try:
-    from ConfigParser import ConfigParser, NoOptionError
+    from ConfigParser import ConfigParser
 except ImportError:
-    from configparser import ConfigParser, NoOptionError
+    from configparser import ConfigParser
 
 import logging
 import os
@@ -27,7 +27,16 @@ def get_config(name=__name__):
     :return: A config parser matching the given name
     """
     cfg = ConfigParser()
-    path = os.environ.get('%s_CONFIG_FILE' % name.upper(), '/etc/tapp/%s_cfg.ini' % name)
+    path = os.environ.get('%s_CONFIG_FILE' % name.upper())
+    if path is None or path == "":
+        fname = '/etc/tapp/%s.ini' % name
+        if isfile(fname):
+            path = fname
+        elif isfile('cfg.ini'):
+            path = 'cfg.ini'
+        else:
+            raise ValueError("Unable to get configuration for tapp %s" % name)
+
     cfg.read(path)
     return cfg
 
@@ -43,7 +52,7 @@ def setup_logging(name, cfg=None):
     """
     logname = "%s_tapp.log" % name
     logfile = cfg.get('log', 'LOGFILE') if cfg is not None and \
-        cfg.get('log', 'LOGFILE') is not None else 'server.log'
+        cfg.get('log', 'LOGFILE') is not None else logname
     loglevel = cfg.get('log', 'LOGLEVEL') if cfg is not None and \
         cfg.get('log', 'LOGLEVEL') is not None else logging.INFO
     logging.basicConfig(filename=logfile, level=loglevel)
