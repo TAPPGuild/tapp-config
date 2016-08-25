@@ -3,12 +3,12 @@ Configuration helpers for TAPPs. Config file and record management are here,
 as well as logging and redis.
 Database configuration is done in sqlalchemy_models, since it has the content to test with.
 """
-from os.path import expanduser
+from os.path import isfile
 
 try:
-    from ConfigParser import ConfigParser, NoOptionError
+    from ConfigParser import ConfigParser
 except ImportError:
-    from configparser import ConfigParser, NoOptionError
+    from configparser import ConfigParser
 
 import logging
 import os
@@ -27,32 +27,36 @@ def get_config(name=__name__):
     :return: A config parser matching the given name
     """
     cfg = ConfigParser()
-    datadir = os.environ.get('%s_DATA_DIR' % name.upper(), os.path.join(expanduser("~"),
-                             '.tapp/%s' % name.lower().replace('-', "").replace('_', "")))
-    path = os.environ.get('%s_CONFIG_FILE' % name.upper(), '%s/cfg.ini' % datadir)
+    path = os.environ.get('%s_CONFIG_FILE' % name.upper())
+    if path is None or path == "":
+        fname = '/etc/tapp/%s.ini' % name
+        if isfile(fname):
+            path = fname
+        elif isfile('cfg.ini'):
+            path = 'cfg.ini'
+        else:
+            raise ValueError("Unable to get configuration for tapp %s" % name)
+
     cfg.read(path)
-    try:
-        if cfg.get('log', 'DATA_DIR') is None:
-            cfg.set('log', 'DATA_DIR', str(datadir))
-    except NoOptionError:
-        cfg.set('log', 'DATA_DIR', str(datadir))
     return cfg
 
 
-def setup_logging(cfg=None):
+def setup_logging(name, prefix="trademanager", cfg=None):
     """
     Create a logger, based on the given configuration.
     Accepts LOGFILE and LOGLEVEL settings.
 
+    :param name: the name of the tapp to log
     :param cfg: The configuration object with logging info.
     :return: The session and the engine as a list (in that order)
     """
+    logname = "/var/log/%s/%s_tapp.log" % (prefix, name)
     logfile = cfg.get('log', 'LOGFILE') if cfg is not None and \
-        cfg.get('log', 'LOGFILE') is not None else 'server.log'
+        cfg.get('log', 'LOGFILE') is not None and cfg.get('log', 'LOGFILE') != "" else logname
     loglevel = cfg.get('log', 'LOGLEVEL') if cfg is not None and \
         cfg.get('log', 'LOGLEVEL') is not None else logging.INFO
     logging.basicConfig(filename=logfile, level=loglevel)
-    return logging.getLogger(__name__)
+    return logging.getLogger(name)
 
 
 def setup_redis():

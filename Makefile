@@ -1,20 +1,18 @@
-makebase = if [ !  -d ~/.tapp ]; \
+makebase = if [ !  -d /etc/tapp ]; \
 	then \
-		mkdir ~/.tapp; \
-	fi
-
-makedirs = if [ !  -d ~/.tapp/test ]; \
-	then \
-		mkdir ~/.tapp/test; \
-		cp cfg.ini ~/.tapp/test; \
+		sudo mkdir /etc/tapp;  \
 	fi
 
 build:
 	python setup.py build
 
+testenv:
+	$(call makebase, "")
+	sudo cp cfg.ini /etc/tapp/test.ini
+	sudo cp test/env_cfg.ini /etc/tapp/test_env.ini
+
 install:
 	$(call makebase, "")
-	$(call makedirs, "")
 	python setup.py install
 
 clean:
@@ -26,7 +24,7 @@ purge:
 	rm -rf build dist tapp_config.egg-info tests/__pycache__ tapp_config/__pycache__
 	rm -rf tests/*.pyc tapp_config/*.pyc *.egg
 	rm -f .coverage*
-	rm -rf ~/.tapp/test
+	rm -fR /etc/tapp/test_tapp.ini /etc/tapp/test_env_tapp.ini
 
 rst:
 	pandoc --from=markdown_github --to=rst --output=README.rst README.md

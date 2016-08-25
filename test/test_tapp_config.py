@@ -23,9 +23,14 @@ class TestGetConfig(unittest.TestCase):
         self.setUp()
 
     def test_get_default_config(self):
-        cfg = get_config("test")
+        cfg = get_config("test_not_known")
         assert cfg.get('db', 'SA_ENGINE_URI') == 'sqlite:////tmp/test.db'
         assert cfg.get('log', 'LOGFILE') == '/tmp/test.log'
+
+    def test_get_installed_config(self):
+        cfg = get_config("test_env")
+        assert cfg.get('db', 'SA_ENGINE_URI') == 'sqlite:////tmp/env_test.db'
+        assert cfg.get('log', 'LOGFILE') == '/tmp/env_test.log'
 
     def test_get_environment_config(self):
         path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'env_cfg.ini')
@@ -42,12 +47,12 @@ class TestSetupLogger(unittest.TestCase):
         except OSError:
             pass
         try:
-            os.remove("server.log")
+            os.remove("/var/log/test_tapp.log")
         except OSError:
             pass
 
     def tearDown(self):
-        logger = setup_logging()
+        logger = setup_logging('test')
         for handler in logger.handlers:
             logger.removeHandler(handler)
         for handler in logger.parent.handlers:
@@ -55,16 +60,16 @@ class TestSetupLogger(unittest.TestCase):
         self.setUp()
 
     def test_setup_default_logger(self):
-        logger = setup_logging()
+        logger = setup_logging('test_none')
         assert isinstance(logger, logging.getLoggerClass())
         message = 'testing 1.2.3.'
         logger.exception(message)
-        assert os.path.isfile('server.log')
+        assert os.path.isfile("test_none_tapp.log")
 
     def test_setup_logger(self):
         cfg = get_config("test")
         assert cfg.get('log', 'LOGFILE') == '/tmp/test.log'
-        logger = setup_logging(cfg)
+        logger = setup_logging('test', cfg=cfg)
         assert isinstance(logger, logging.getLoggerClass())
         message = 'testing 1.2.3.'
         logger.exception(message)
